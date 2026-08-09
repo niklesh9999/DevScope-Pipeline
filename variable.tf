@@ -21,6 +21,7 @@ variable "nic" {
 
 }
 
+
 variable "vm" {
   type = map(any)
 
