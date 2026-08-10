@@ -20,6 +20,7 @@ variable "public_ip" {
   type = map(any)
 
 }
+
 variable "nic" {
   type = map(any)
 
