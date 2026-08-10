@@ -32,11 +32,8 @@ module "subnet" {
 
   subnet = var.subnet
 
-  network_security_group_id = module.nsg.network_security_group_id
-
   depends_on = [
-    module.vnet,
-    module.nsg
+    module.vnet
   ]
 }
 
@@ -62,13 +59,18 @@ module "vm" {
 
 }
 
+
+
 module "nsg" {
-  depends_on = [module.resource_group]
-
   source = "./module/NSG"
-  nsg    = var.nsg
+
+  nsg       = var.nsg
+  subnet_id = module.subnet.subnet_id
+
+  depends_on = [
+    module.resource_group,
+    module.subnet
+  ]
 }
-
-
 
 

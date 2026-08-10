@@ -28,13 +28,11 @@ variable "vm" {
 }
 
 variable "nsg" {
-  type = map(any)
-}
-
-variable "nsga" {
   type = map(object({
-    subnet_key = string
-    nsg_key    = string
+    name           = string
+    location       = string
+    resource_group = string
+    subnet_key     = string
   }))
 }
 
