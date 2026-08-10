@@ -63,9 +63,19 @@ module "nsg" {
 }
 
 
-module "name" {
-  source = "./module/nsga"
-  nsga   = var.nsga
+module "nsga" {
+  source = "./module/NSGA"
+
+  nsga = var.nsga
+
+  subnet_id = module.subnet.subnet_id
+
+  network_security_group_id = module.nsg.network_security_group_id
+
+  depends_on = [
+    module.subnet,
+    module.nsg
+  ]
 }
 
 
