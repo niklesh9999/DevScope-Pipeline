@@ -1,0 +1,12 @@
+name: Terraform CD
+
+on:
+  workflow_dispatch:
+
+jobs:
+  terraform-cd:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
