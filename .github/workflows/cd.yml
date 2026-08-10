@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout
+      # 1. Checkout repository
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -20,7 +20,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      # 3. Create Terraform tfvars file
+      # 3. Create terraform.tfvars from GitHub Secret
       - name: Create Terraform Variables File
         shell: bash
         run: |
@@ -47,9 +47,9 @@ jobs:
 
       # 7. Terraform Plan
       - name: Terraform Plan
-        run: terraform plan -var-file="terraform.tfvars" -out="tfplan"
+        run: terraform plan -input=false -var-file="terraform.tfvars" -out="tfplan"
 
-      # 8. Upload Plan
+      # 8. Upload Terraform Plan
       - name: Upload Terraform Plan
         uses: actions/upload-artifact@v4
         with:
@@ -60,13 +60,14 @@ jobs:
   terraform-apply:
     name: Terraform Apply
     runs-on: ubuntu-latest
+
     needs: terraform-plan
 
     environment:
       name: production
 
     steps:
-      # 1. Checkout
+      # 1. Checkout repository
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -74,7 +75,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      # 3. Create Terraform tfvars file
+      # 3. Create terraform.tfvars from GitHub Secret
       - name: Create Terraform Variables File
         shell: bash
         run: |
@@ -95,7 +96,7 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-      # 6. Download Approved Plan
+      # 6. Download Terraform Plan
       - name: Download Terraform Plan
         uses: actions/download-artifact@v4
         with:
@@ -103,4 +104,4 @@ jobs:
 
       # 7. Terraform Apply
       - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan
+        run: terraform apply -input=false -auto-approve tfplan
