@@ -31,6 +31,7 @@ variable "nsg" {
   type = map(any)
 }
 
+
 variable "nsga" {
   type = map(object({
     nsg_name             = string
