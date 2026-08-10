@@ -64,7 +64,7 @@ module "nsg" {
 
 
 module "nsga" {
-  source = "./module/NSGA"
+  source = "./module/nsga"
 
   nsga = var.nsga
 
