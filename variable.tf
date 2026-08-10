@@ -21,6 +21,7 @@ variable "public_ip" {
 
 }
 
+
 variable "nic" {
   type = map(any)
 
