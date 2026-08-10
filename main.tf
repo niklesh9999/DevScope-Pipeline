@@ -28,10 +28,16 @@ module "vnet" {
 
 
 module "subnet" {
-  depends_on = [module.vnet]
-
   source = "./module/subnet"
+
   subnet = var.subnet
+
+  network_security_group_id = module.nsg.network_security_group_id
+
+  depends_on = [
+    module.vnet,
+    module.nsg
+  ]
 }
 
 module "public_ip" {
@@ -64,19 +70,5 @@ module "nsg" {
 }
 
 
-module "nsga" {
-  source = "./module/nsga"
-
-  nsga = var.nsga
-
-  subnet_id = module.subnet.subnet_id
-
-  network_security_group_id = module.nsg.network_security_group_id
-
-  depends_on = [
-    module.subnet,
-    module.nsg
-  ]
-}
 
 
