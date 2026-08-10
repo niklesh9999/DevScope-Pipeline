@@ -7,8 +7,13 @@ variable "vnet" {
 }
 
 variable "subnet" {
-  type = map(any)
-
+  type = map(object({
+    name                 = string
+    resource_group       = string
+    virtual_network_name = string
+    address_prefixes     = list(string)
+    nsg_key              = string
+  }))
 }
 
 variable "public_ip" {
@@ -21,7 +26,20 @@ variable "nic" {
 
 }
 
+
 variable "vm" {
   type = map(any)
 
 }
+
+variable "nsg" {
+  type = map(object({
+    name           = string
+    location       = string
+    resource_group = string
+  }))
+}
+
+
+
+

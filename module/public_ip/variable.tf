@@ -1,4 +1,4 @@
 variable "public_ip" {
-    type = map(any)
-  
+  type = map(any)
+
 }

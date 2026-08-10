@@ -1,4 +1,4 @@
 variable "nic" {
-    type = map(any)
-  
+  type = map(any)
+
 }
