@@ -14,6 +14,9 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
   disable_password_authentication = true
 
+  # Checkov CKV_AZURE_50
+  allow_extension_operations = false
+
   admin_ssh_key {
     username   = each.value.admin_username
     public_key = each.value.ssh_public_key
