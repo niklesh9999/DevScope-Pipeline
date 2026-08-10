@@ -55,3 +55,17 @@ module "vm" {
   vm         = var.vm
 
 }
+
+module "nsg" {
+  depends_on = [module.resource_group]
+  source     = "./module/NSG"
+  nsg        = var.nsg
+}
+
+
+module "name" {
+  source = "./module/nsga"
+  nsga   = var.nsga
+}
+
+
