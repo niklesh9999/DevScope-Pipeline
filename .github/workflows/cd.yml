@@ -7,20 +7,19 @@ permissions:
   contents: read
 
 jobs:
+
   terraform-plan:
     name: Terraform Plan
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout repository
+
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # 2. Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      # 3. Create terraform.tfvars from GitHub Secret
       - name: Create Terraform Variables File
         shell: bash
         run: |
@@ -28,7 +27,6 @@ jobs:
           ${{ secrets.TFVARS_CONTENT }}
           EOF
 
-      # 4. Azure Login
       - name: Azure Login
         uses: azure/login@v2
         with:
@@ -37,19 +35,21 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # 5. Terraform Init
       - name: Terraform Init
         run: terraform init
 
-      # 6. Terraform Validate
       - name: Terraform Validate
         run: terraform validate
 
-      # 7. Terraform Plan
+      - name: Check Terraform Variables File
+        shell: bash
+        run: |
+          test -s terraform.tfvars
+          echo "terraform.tfvars exists and is not empty"
+
       - name: Terraform Plan
         run: terraform plan -input=false -var-file="terraform.tfvars" -out="tfplan"
 
-      # 8. Upload Terraform Plan
       - name: Upload Terraform Plan
         uses: actions/upload-artifact@v4
         with:
@@ -67,15 +67,13 @@ jobs:
       name: production
 
     steps:
-      # 1. Checkout repository
+
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # 2. Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      # 3. Create terraform.tfvars from GitHub Secret
       - name: Create Terraform Variables File
         shell: bash
         run: |
@@ -83,7 +81,6 @@ jobs:
           ${{ secrets.TFVARS_CONTENT }}
           EOF
 
-      # 4. Azure Login
       - name: Azure Login
         uses: azure/login@v2
         with:
@@ -92,16 +89,13 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # 5. Terraform Init
       - name: Terraform Init
         run: terraform init
 
-      # 6. Download Terraform Plan
       - name: Download Terraform Plan
         uses: actions/download-artifact@v4
         with:
           name: terraform-plan
 
-      # 7. Terraform Apply
       - name: Terraform Apply
         run: terraform apply -input=false -auto-approve tfplan
