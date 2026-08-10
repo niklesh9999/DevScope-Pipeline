@@ -27,16 +27,28 @@ module "vnet" {
 }
 
 
+module "nsg" {
+  source = "./module/NSG"
+
+  nsg = var.nsg
+
+  depends_on = [
+    module.resource_group
+  ]
+}
+
 module "subnet" {
   source = "./module/subnet"
 
   subnet = var.subnet
 
+  network_security_group_id = module.nsg.network_security_group_id
+
   depends_on = [
-    module.vnet
+    module.vnet,
+    module.nsg
   ]
 }
-
 module "public_ip" {
   depends_on = [module.resource_group]
   source     = "./module/public_ip"
@@ -61,16 +73,6 @@ module "vm" {
 
 
 
-module "nsg" {
-  source = "./module/NSG"
 
-  nsg       = var.nsg
-  subnet_id = module.subnet.subnet_id
-
-  depends_on = [
-    module.resource_group,
-    module.subnet
-  ]
-}
 
 

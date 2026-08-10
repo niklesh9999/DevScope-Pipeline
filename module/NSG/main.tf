@@ -13,16 +13,12 @@ resource "azurerm_network_security_group" "nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = "*"
+
+    # IMPORTANT:
+    # "*" करने पर CKV_AZURE_10 fail होगा.
+    # यहाँ अपने trusted/admin network का CIDR डालो.
+    source_address_prefix     = "10.0.0.0/24"
+
     destination_address_prefix = "*"
   }
-}
-
-
-resource "azurerm_subnet_network_security_group_association" "nsga" {
-  for_each = var.nsg
-
-  subnet_id = var.subnet_id[each.value.subnet_key]
-
-  network_security_group_id = azurerm_network_security_group.nsg[each.key].id
 }
