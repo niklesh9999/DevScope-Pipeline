@@ -29,9 +29,9 @@ module "vnet" {
 
 module "subnet" {
   depends_on = [module.vnet]
-  source     = "./module/subnet"
-  subnet     = var.subnet
 
+  source = "./module/subnet"
+  subnet = var.subnet
 }
 
 module "public_ip" {
@@ -58,8 +58,9 @@ module "vm" {
 
 module "nsg" {
   depends_on = [module.resource_group]
-  source     = "./module/NSG"
-  nsg        = var.nsg
+
+  source = "./module/NSG"
+  nsg    = var.nsg
 }
 
 
